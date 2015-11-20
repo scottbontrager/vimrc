@@ -4,13 +4,16 @@ syntax on
 let loaded_netrwPlugin = 1
 
 set incsearch
+set lazyredraw
 set expandtab
 set termencoding=utf-8
 set encoding=utf-8
 set smarttab
-set ts=2
 set sts=2
 set shiftwidth=2
+set tabstop=2
+set ai "Auto indent"
+set si "Smart indent"
 set shiftround
 set number
 set bs=2 "for macports vim
@@ -56,6 +59,32 @@ call pathogen#infect()
 filetype on
 filetype plugin on
 filetype plugin indent on
+
+" Return to last edit position when opening files (You want this!)
+" ---> This code has errors.  Need to debug.
+"autocmd BufReadPost *
+"     \ if line("'\") > 0 && line("'\") <= line("$") |
+"     \   exe "normal! g`\" |
+"     \ endif
+
+" Remember info about open buffers on close
+set viminfo^=%
+
+" Delete trailing white space on save, useful for Python and CoffeeScript ;)
+func! DeleteTrailingWS()
+  exe "normal mz"
+  %s/\s\+$//ge
+  exe "normal `z"
+endfunc
+"autocmd BufWrite *.py :call DeleteTrailingWS()
+"autocmd BufWrite *.coffee :call DeleteTrailingWS()
+autocmd BufWrite *.* :call DeleteTrailingWS()
+
+" Uncrustify
+autocmd FileType c noremap <buffer> <c-f> :call Uncrustify('c')<CR>
+autocmd FileType c vnoremap <buffer> <c-f> :call RangeUncrustify('c')<CR>
+autocmd FileType cpp noremap <buffer> <c-f> :call Uncrustify('cpp')<CR>
+autocmd FileType cpp vnoremap <buffer> <c-f> :call RangeUncrustify('cpp')<CR>
 
 " Tabs
 map <silent> <C-T> :tabnew<CR>
@@ -131,6 +160,10 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '\.so$', '\.o$', '\.la$', '\.a$', '\.class$', '\~$', '\.beam$', '^Mnesia.', 'deps/', '\.hi$', 'vendor/']
+
+" NERDTree-Tabs
+let g:nerdtree_tabs_open_on_console_startup = 1
+let g:nerdtree_tabs_smart_startup_focus = 2
 
 let g:Tlist_Use_Right_Window = 1
 "let g:Tlist_Auto_Open = 1
