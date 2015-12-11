@@ -99,6 +99,10 @@ imap <silent> <kPageDown> <C-O>:tabnext<CR>
 map <silent> <C-H> :tabfirst<CR>
 imap <silent> <C-H> <C-O>:tabfirst<CR>
 
+" ctrlp
+let g:ctrlp_by_filename = 1
+let g:ctrlp_working_path_mode = ''
+
 " Syntastic
 let g:syntastic_enable_signs = 1
 let g:syntastic_error_symbol         = '✗'
